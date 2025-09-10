@@ -30,6 +30,13 @@ pipeline{
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
+        stage("Sonar Quality gate Scan"){
+            steps{
+                timeout(time: 2, unit: "MINUTES"){
+                    waitForQualityGate abortPipeline: false
+                }
+            }
+        }
         stage("trivy file system scan"){
             steps{
                 sh "trivy fs --format table -o trivy-fs-report.html ."
